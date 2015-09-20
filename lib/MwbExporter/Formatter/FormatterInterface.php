@@ -48,6 +48,8 @@ interface FormatterInterface
     const CFG_RELATED_VAR_NAME_FORMAT   = 'relatedVarNameFormat';
     const CFG_RELATED_PREFIX            = 'relatedPrefix';
 
+    const CFG_EXTENDS_CLASS             = 'extendsClass';
+
     /**
      * Get the registry object.
      *
