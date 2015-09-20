@@ -699,6 +699,9 @@ class Table extends BaseTable
         if ('@ORM\\' === $this->addPrefix()) {
             $uses[] = 'Doctrine\ORM\Mapping as ORM';
         }
+        if ($this->getDocument()->getConfig()->get(Formatter::CFG_USE_GEDMO)) {
+            $uses[] = 'Gedmo\Mapping\Annotation as Gedmo';
+        }
         if (count($this->getManyToManyRelations()) || $this->getColumns()->hasOneToManyRelation()) {
             $uses[] = $this->getCollectionClass();
         }

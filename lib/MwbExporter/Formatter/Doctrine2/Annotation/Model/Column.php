@@ -137,10 +137,13 @@ class Column extends BaseColumn
             }
         }
 
+        $timestampable = $this->parseComment('timestampable');
+
         $writer
             ->write('/**')
             ->writeIf($comment, $comment)
             ->write(' * @var '.$nativeType)
+            ->writeIf($timestampable, sprintf(' * @Gedmo\Timestampable(on="%s")', $timestampable))
             ->writeIf($this->isPrimary,
                     ' * '.$this->getTable()->getAnnotation('Id'))
             ->write(' * '.$this->getTable()->getAnnotation('Column', $asAnnotation))
