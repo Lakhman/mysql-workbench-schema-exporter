@@ -191,6 +191,9 @@ class Table extends BaseTable
             $serializableEntity  = $this->getDocument()->getConfig()->get(Formatter::CFG_GENERATE_ENTITY_SERIALIZATION);
             $toArrrabeEntity  = $this->getDocument()->getConfig()->get(Formatter::CFG_GENERATE_ENTITY_TO_ARRAY);
 
+            $extendsClass = $this->getClassToExtend();
+            $implementsClass = (($implements = $this->getClassImplementations()) ? ' implements '.$implements : '');
+
             $lifecycleCallbacks  = $this->getLifecycleCallbacks();
 
             $comment = $this->getComment();
@@ -211,7 +214,7 @@ class Table extends BaseTable
                 ->write(' * '.$this->getAnnotation('Entity', array('repositoryClass' => $this->getDocument()->getConfig()->get(Formatter::CFG_AUTOMATIC_REPOSITORY) ? $repositoryNamespace.$this->getModelName().'Repository' : null)))
                 ->writeIf($lifecycleCallbacks, ' * @ORM\HasLifecycleCallbacks')
                 ->write(' */')
-                ->write('class '.$this->getModelName().(($implements = $this->getClassImplementations()) ? ' implements '.$implements : ''))
+                ->write('class '.$this->getModelName().$extendsClass.$implementsClass)
                 ->write('{')
                 ->indent()
                     ->writeCallback(function (WriterInterface $writer, Table $_this = null) use ($skipGetterAndSetter, $serializableEntity, $toArrrabeEntity, $lifecycleCallbacks) {
@@ -669,6 +672,20 @@ class Table extends BaseTable
      */
     protected function getClassImplementations()
     {
+    }
+
+    /**
+     * Get the class name to extend
+     *
+     * @return string
+     */
+    protected function getClassToExtend()
+    {
+        $class = $this->getDocument()->getConfig()->get(Formatter::CFG_EXTENDS_CLASS);
+        if(empty($class)) {
+            return '';
+        }
+        return " extends $class";
     }
 
     /**
