@@ -143,7 +143,7 @@ class Column extends BaseColumn
             ->write('/**')
             ->writeIf($comment, $comment)
             ->write(' * @var '.$nativeType)
-            ->writeIf($timestampable, sprintf(' * @Gedmo\Timestampable(on="%s")', $timestampable))
+            ->writeIf($timestampable, sprintf(' * @Gedmo\Timestampable(%s)', $timestampable))
             ->writeIf($this->isPrimary,
                     ' * '.$this->getTable()->getAnnotation('Id'))
             ->write(' * '.$this->getTable()->getAnnotation('Column', $asAnnotation))
