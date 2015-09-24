@@ -138,6 +138,9 @@ class Column extends BaseColumn
         }
 
         $timestampable = $this->parseComment('timestampable');
+        if ($timestampable) {
+            $timestampable = str_replace(['“”', '"', $timestampable]);
+        }
 
         $writer
             ->write('/**')
