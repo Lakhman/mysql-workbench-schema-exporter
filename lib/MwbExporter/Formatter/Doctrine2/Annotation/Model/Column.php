@@ -69,6 +69,10 @@ class Column extends BaseColumn
             $attributes['options']['default'] = $defaultValue;
         }
 
+        if (!isset($attributes['options']['comment']) && !isset($attributes['options']['default'])) {
+            unset($attributes['options']);
+        }
+
         return $attributes;
     }
 
@@ -147,11 +151,9 @@ class Column extends BaseColumn
             ->writeIf($comment, $comment)
             ->write(' * @var '.$nativeType)
             ->writeIf($timestampable, sprintf(' * @Gedmo\Timestampable(%s)', $timestampable))
-            ->writeIf($this->isPrimary,
-                    ' * '.$this->getTable()->getAnnotation('Id'))
+            ->writeIf($this->isPrimary, ' * '.$this->getTable()->getAnnotation('Id'))
             ->write(' * '.$this->getTable()->getAnnotation('Column', $asAnnotation))
-            ->writeIf($this->isAutoIncrement(),
-                    ' * '.$this->getTable()->getAnnotation('GeneratedValue', ['strategy' => ($val = $this->parseComment('generator-strategy')) ? $val : 'AUTO']))
+            ->writeIf($this->isAutoIncrement(), ' * '.$this->getTable()->getAnnotation('GeneratedValue', ['strategy' => ($val = $this->parseComment('generator-strategy')) ? $val : 'AUTO']))
             ->write(' */')
             ->write('protected $'.$filedName.$value.';')
             ->write('')
