@@ -146,6 +146,11 @@ class Column extends BaseColumn
             $timestampable = str_replace(['“', '”'], '"', $timestampable);
         }
 
+        // Hacky fix datetime bug
+        if ($nativeType == 'datetime') {
+            $nativeType = '\DateTime';
+        }
+
         $writer
             ->write('/**')
             ->writeIf($comment, $comment)
@@ -456,6 +461,11 @@ class Column extends BaseColumn
             if (!$this->isNotNull()) {
                 $nullType = 'null|';
             }
+        }
+
+        // Hacky fix datetime bug
+        if ($nativeType == 'datetime') {
+            $nativeType = '\DateTime';
         }
 
         $propName = $varName = $this->getPhpColumnName();
