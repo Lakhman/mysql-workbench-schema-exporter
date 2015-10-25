@@ -346,6 +346,8 @@ class Table extends BaseTable
 
         if ($this->getColumns()->columnExits('name')) {
             $column = $this->getColumns()->getColumnByName('name');
+        } elseif ($this->getColumns()->columnExits('title')) {
+            $column = $this->getColumns()->getColumnByName('title');
         } elseif ($this->getColumns()->columnExits('id')) {
             $column = $this->getColumns()->getColumnByName('id');
         } else {
