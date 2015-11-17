@@ -146,6 +146,11 @@ class Column extends BaseColumn
             $timestampable = str_replace(['“', '”'], '"', $timestampable);
         }
 
+        $sluggable = $this->parseComment('sluggable');
+        if ($sluggable) {
+            $sluggable = str_replace(['“', '”'], '"', $sluggable);
+        }
+
         // Hacky fix datetime bug
         if ($nativeType == 'datetime') {
             $nativeType = '\DateTime';
@@ -156,6 +161,7 @@ class Column extends BaseColumn
             ->writeIf($comment, $comment)
             ->write(' * @var '.$nativeType)
             ->writeIf($timestampable, sprintf(' * @Gedmo\Timestampable(%s)', $timestampable))
+            ->writeIf($sluggable, sprintf(' * @Gedmo\Slug(%s)', $sluggable))
             ->writeIf($this->isPrimary, ' * '.$this->getTable()->getAnnotation('Id'))
             ->write(' * '.$this->getTable()->getAnnotation('Column', $asAnnotation))
             ->writeIf($this->isAutoIncrement(), ' * '.$this->getTable()->getAnnotation('GeneratedValue', ['strategy' => ($val = $this->parseComment('generator-strategy')) ? $val : 'AUTO']))
