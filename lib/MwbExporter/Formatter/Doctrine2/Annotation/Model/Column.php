@@ -246,7 +246,7 @@ class Column extends BaseColumn
             $joinColumnAnnotationOptions = [
                 'name'                 => $foreign->getForeign()->getColumnName(),
                 'referencedColumnName' => $foreign->getLocal()->getColumnName(),
-                'onDelete'             => $formatter->getDeleteRule($foreign->getLocal()->getParameters()->get('deleteRule')),
+                'onDelete'             => $formatter->getDeleteRule($foreign->getParameters()->get('deleteRule')),
                 'nullable'             => !$foreign->getForeign()->isNotNull() ? true : false,
             ];
 
