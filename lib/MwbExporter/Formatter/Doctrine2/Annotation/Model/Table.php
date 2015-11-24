@@ -219,6 +219,7 @@ class Table extends BaseTable
                 ->indent()
                     ->writeCallback(function (WriterInterface $writer, Table $_this = null) use ($skipGetterAndSetter, $serializableEntity, $toArrrabeEntity, $lifecycleCallbacks) {
                         $_this->writePreClassHandler($writer);
+                        $_this->writeConstants($writer);
                         $_this->getColumns()->write($writer);
                         $_this->writeManyToMany($writer);
                         $_this->writeConstructor($writer);
@@ -263,6 +264,42 @@ class Table extends BaseTable
         }
 
         return self::WRITE_EXTERNAL;
+    }
+
+    /**
+     * Add the ability to pass a json string to the table comment
+     * to use as constants (key value)
+     *
+     * Add the following to the TABLE comment (click the dropdown arrow on the top right!)
+     *
+     * e.g: {d:constants}{"CONSTANT1" : 1,"CONSTANT2" : 2,"CONSTANT3" : 3}{/d:constants}
+     *
+     */
+    public function writeConstants(WriterInterface $writer)
+    {
+        $constants = trim($this->parseComment('constants', $this->parameters->get('constants')));
+        $constants = json_decode($constants, true);
+
+        if (!empty($constants) && json_last_error() == JSON_ERROR_NONE) {
+            $writer
+                ->write('/**')
+                ->write(' * Class Constants.')
+                ->write(' */');
+
+            $maxlen = max(array_map('strlen', array_keys($constants)));
+
+            foreach ($constants as $key => $value) {
+                $writeValue = is_int($value) ? $value : "'" . $value . "''";
+                $emptySpaces = str_repeat(' ', $maxlen - strlen($key) + 1);
+                $writer->write(sprintf('const %s%s= %s;', $key, $emptySpaces, $writeValue));
+            }
+
+            $writer->write('');
+
+            return true;
+        }
+
+        return $this;
     }
 
     public function writeUsedClasses(WriterInterface $writer)
