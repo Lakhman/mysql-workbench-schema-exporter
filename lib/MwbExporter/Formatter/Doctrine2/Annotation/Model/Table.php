@@ -742,6 +742,20 @@ class Table extends BaseTable
     }
 
     /**
+     * Get the class name to extend
+     *
+     * @return string
+     */
+    protected function getClassToExtend()
+    {
+        $class = $this->getDocument()->getConfig()->get(Formatter::CFG_EXTENDS_CLASS);
+        if(empty($class)) {
+            return '';
+        }
+        return " extends $class";
+    }
+
+    /**
      * Get used classes.
      *
      * @return array
