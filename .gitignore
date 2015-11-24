@@ -2,6 +2,7 @@ nbproject/
 .buildpath
 .project
 .settings/
+.idea/
 *.zip
 *.sh
 *.7z
