@@ -277,7 +277,8 @@ class Table extends BaseTable
      */
     public function writeConstants(WriterInterface $writer)
     {
-        $constants = trim($this->parseComment('constants', $this->parameters->get('constants')));
+        $com = $this->parseComment('constants', $this->parameters->get('constants'));
+        $constants = str_replace(['“', '”'], '"', trim($com)); // wb dodgy quotes
         $constants = json_decode($constants, true);
 
         if (!empty($constants) && json_last_error() == JSON_ERROR_NONE) {
