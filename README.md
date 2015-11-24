@@ -88,7 +88,9 @@ Sample export paramaters (JSON) for doctrine2-annotation:
             "filename": "%entity%.%extension%",
             "quoteIdentifier": false,
             "generateEntitySerialization": false,
-            "generateEntityToArray": true
+            "generateEntityToArray": true,
+            "extendsClass": false,
+            "useGedmo": true
         }
     }
 
@@ -172,6 +174,14 @@ General options applied to all formatter.
 
     If this option is enabled, all table names and column names will be quoted using backtick (`` ` ``). Usefull when the table name or column name contains reserved word. Default is `false`.
 
+  * `extendsClass`
+
+    Extend a base class, must be full namespace path to cache. Default is `false`.
+
+  * `useGedmo`
+
+    This is Doctrine specific, if we're using Gedmo Timestampable and Sluggable, then set this to `true`, this will automatically add the `use Gedmo\Mapping\Annotation as Gedmo;` statement to the top of all entity classes (to import the annotation)
+
 ### Comment behavior for Doctrine 2.0 Annotation
 
   * `{d:bundleNamespace}AcmeBundle{/d:bundleNamespace}` (applied to Table)
@@ -241,7 +251,16 @@ General options applied to all formatter.
   * `{d:type}dateinterval|datetime_with_millisecond{/d:type}` (applied to Field)
     Force cast datetype
 
+   
+  * `{d:timestampable}on=“create”{/d:timestampable}` (applied to Field)
+  * `{d:timestampable}on=“update”{/d:timestampable}` (applied to Field)
+    Add the `Gedmo` Timestampable annotation to field (datetime field), you can include other options here also.
 
+  * `{d:sluggable}fields={"title"}{/d:sluggable}` (applied to Field)
+    Add the `Gedmo` Sluggable annotation to field (e.g: varchar or text field), you can include other options here also.
+
+  * `{d:constants}{"CONSTANT1" : 1,"CONSTANT2" : 2,"CONSTANT3" : 3}{/d:constants}` (applied to Table)
+    This must be a json object (key, value) containing our constants (placed at the start of the class). Will add e.g `const CONSTANT1 = 1;..`
 
 #### Additional option list for Doctrine 2.0 Annotation ZF2 Inputfilter
 
