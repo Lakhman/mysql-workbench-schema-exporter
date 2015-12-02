@@ -1,15 +1,20 @@
 {
-    "name": "turnaev/mysql-workbench-schema-exporter",
+    "name": "Lakhman/mysql-workbench-schema-exporter",
     "type": "cli",
     "description": "MySQL Workbench Schema Exporter",
     "keywords": ["mysql","workbench","database","doctrine","cli"],
-    "homepage": "https://github.com/turnaev/mysql-workbench-schema-exporter",
+    "homepage": "https://github.com/Lakhman/mysql-workbench-schema-exporter",
     "license": "MIT",
     "authors": [
         {
             "name": "Vladimir Turnaev",
             "email": "turnaev@gmail.com",
             "role": "Developer"
+        },
+        {
+          "name": "Anil Lakhman",
+          "email": "anil.lakhman@gmail.com",
+          "role": "Developer/Forker"
         }
     ],
     "require": {
