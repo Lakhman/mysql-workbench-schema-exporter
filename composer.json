@@ -1,9 +1,9 @@
 {
-    "name": "Lakhman/mysql-workbench-schema-exporter",
+    "name": "lakhman/mysql-workbench-schema-exporter",
     "type": "cli",
     "description": "MySQL Workbench Schema Exporter",
     "keywords": ["mysql","workbench","database","doctrine","cli"],
-    "homepage": "https://github.com/Lakhman/mysql-workbench-schema-exporter",
+    "homepage": "https://github.com/lakhman/mysql-workbench-schema-exporter",
     "license": "MIT",
     "authors": [
         {
