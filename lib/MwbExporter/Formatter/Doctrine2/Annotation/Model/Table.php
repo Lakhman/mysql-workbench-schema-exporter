@@ -290,9 +290,13 @@ class Table extends BaseTable
             $maxlen = max(array_map('strlen', array_keys($constants)));
 
             foreach ($constants as $key => $value) {
-                $writeValue = is_int($value) ? $value : "'" . $value . "''";
-                $emptySpaces = str_repeat(' ', $maxlen - strlen($key) + 1);
-                $writer->write(sprintf('const %s%s= %s;', $key, $emptySpaces, $writeValue));
+                if ($key == 'br' && $value == 'br') {
+                    $writer->write('');
+                } else {
+                    $writeValue = is_int($value) ? $value : "'" . $value . "''";
+                    $emptySpaces = str_repeat(' ', $maxlen - strlen($key) + 1);
+                    $writer->write(sprintf('const %s%s= %s;', $key, $emptySpaces, $writeValue));
+                }
             }
 
             $writer->write('');
