@@ -49,7 +49,6 @@ interface FormatterInterface
     const CFG_RELATED_PREFIX            = 'relatedPrefix';
 
     const CFG_EXTENDS_CLASS             = 'extendsClass';
-    const CFG_USE_GEDMO                 = 'useGedmo';
 
     /**
      * Get the registry object.

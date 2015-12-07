@@ -32,6 +32,7 @@ use Doctrine\Common\Inflector\Inflector;
 use MwbExporter\Object\Annotation;
 use MwbExporter\Writer\WriterInterface;
 use MwbExporter\Formatter\Doctrine2\Annotation\Formatter;
+use MwbExporter\Formatter\Doctrine2\Annotation\Model\Column;
 
 class Table extends BaseTable
 {
@@ -290,7 +291,8 @@ class Table extends BaseTable
             $maxlen = max(array_map('strlen', array_keys($constants)));
 
             foreach ($constants as $key => $value) {
-                if ($key == 'br' && $value == 'br') {
+                if ($key === '' || $value === '') { // strict comparison
+                    // If a k or v is empty, write a blank line
                     $writer->write('');
                 } else {
                     $writeValue = is_int($value) ? $value : "'" . $value . "''";
@@ -756,9 +758,29 @@ class Table extends BaseTable
         if ('@ORM\\' === $this->addPrefix()) {
             $uses[] = 'Doctrine\ORM\Mapping as ORM';
         }
-        if ($this->getDocument()->getConfig()->get(Formatter::CFG_USE_GEDMO)) {
-            $uses[] = 'Gedmo\Mapping\Annotation as Gedmo';
+
+        // Add our custom timestampable or sluggable uses statement if we have a relevant comment
+        $columns = $this->getColumns()->getColumns();
+        // Timestampable/Sluggable
+        foreach ($columns as $column) {
+            /** @var Column $column */
+            $timestampableExists = $column->parseComment('timestampable');
+            $sluggableExists = $column->parseComment('sluggable');
+            if ($timestampableExists || $sluggableExists) {
+                $uses[] = 'Gedmo\Mapping\Annotation as Gedmo';
+                break;
+            }
         }
+
+        // TBBC Money Bundle
+        foreach ($columns as $column) {
+            $commentExists = $column->parseComment('tbbc');
+            if ($commentExists) {
+                $uses[] = 'Money\Currency';
+                $uses[] = 'Money\Money';
+            }
+        }
+
         if (count($this->getManyToManyRelations()) || $this->getColumns()->hasOneToManyRelation()) {
             $uses[] = $this->getCollectionClass();
         }

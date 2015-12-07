@@ -477,6 +477,14 @@ class Column extends BaseColumn
         $propName = $varName = $this->getPhpColumnName();
         $funactionName = $this->columnNameBeautifier($this->getColumnName());
 
+        // If it's a price column (e.g: price_amount), before the getter/setter,
+        // write our custom price g/s (to return our Money object)
+        if ($tbbcPriceColumn = $this->parseComment('tbbc')) {
+            if (empty(!$tbbcPriceColumn)) {
+                $this->writePriceMoneyGetterAndSetter($writer, $tbbcPriceColumn);
+            }
+        }
+
         if ($this->parseComment('skip') == 'true') {
             return;
         }
@@ -516,6 +524,87 @@ class Column extends BaseColumn
         ;
 
         return $this;
+    }
+
+    /**
+     * This will write a getter and setter for `solution 1` here:
+     *
+     *  - https://github.com/TheBigBrainsCompany/TbbcMoneyBundle
+     *
+     * The full (field) comment is as follows:
+     *  - `{d:tbbc}true,getPrice,setPrice,priceCurrency,priceAmount{/d:tbbc}`
+     *
+     * @param WriterInterface $writer
+     * @param string          $tbbcComment our string like above (we explode on `,`)
+     */
+    public function writePriceMoneyGetterAndSetter(WriterInterface $writer, $tbbcComment)
+    {
+        $parsedComments = explode(',', $tbbcComment);
+
+        $fnGetName = 'getPrice';
+        $fnSetName = 'setPrice';
+        $priceCurrency = 'priceCurrency';
+        $priceAmount = 'priceAmount';
+
+        // Use as custom name for the function (getPrice, setPrice)
+        if (!empty($parsedComments[1]) && !empty($parsedComments[2])) { // price
+            $fnGetName = $parsedComments[1];
+            $fnSetName = $parsedComments[2];
+        }
+
+        if (!empty($parsedComments[3]) && !empty($parsedComments[4])) { // fields
+            $priceCurrency = $parsedComments[3];
+            $priceAmount = $parsedComments[4];
+        }
+
+        $writer
+            // setter
+            ->write('/**')
+            ->write(' * Set `Money`')
+            ->write(' *')
+            ->write(' * @param Money $price')
+            ->write(' *')
+            ->write(' * @return '.$this->getTable()->getNamespace())
+            ->write(' */')
+            ->write('public function '.$fnSetName.'(Money $price)')
+            ->write('{')
+            ->indent()
+            ->write('$this->'.$priceAmount.' = $price->getAmount();')
+            ->write('$this->'.$priceCurrency.' = $price->getCurrency()->getName();')
+            ->write('')
+            ->write('return $this;')
+            ->outdent()
+            ->write('}')
+            ->write('');
+
+        // getter
+        $writer
+            ->write('/**')
+            ->write(' * Get `Money`')
+            ->write(' *')
+            ->write(' * @return Money')
+            ->write(' */')
+            ->write('public function '.$fnGetName.'()')
+            ->write('{')
+            ->indent()
+            ->write('if (!$this->'.$priceCurrency.') {')
+            ->indent()
+            ->write('return null;')
+            ->outdent()
+            ->write('}')
+            ->write('')
+            ->write('if (!$this->'.$priceAmount.') {')
+            ->indent()
+            ->write('return new Money(0, new Currency($this->'.$priceCurrency.'));')
+            ->outdent()
+            ->write('}')
+            ->write('')
+            ->write('return new Money($this->'.$priceAmount.', new Currency($this->'.$priceCurrency.'));')
+            ->outdent()
+            ->write('}')
+            ->write('')
+        ;
+
     }
 
     public function writeRelationsGetterAndSetter(WriterInterface $writer)

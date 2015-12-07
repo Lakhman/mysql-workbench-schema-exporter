@@ -76,7 +76,6 @@ abstract class Formatter implements FormatterInterface
             static::CFG_RELATED_PREFIX          => '',
 
             static::CFG_EXTENDS_CLASS           => false,
-            static::CFG_USE_GEDMO               => false
         ));
         $this->setDatatypeConverter($this->createDatatypeConverter());
         $this->init();

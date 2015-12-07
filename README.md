@@ -89,8 +89,7 @@ Sample export paramaters (JSON) for doctrine2-annotation:
             "quoteIdentifier": false,
             "generateEntitySerialization": false,
             "generateEntityToArray": true,
-            "extendsClass": false,
-            "useGedmo": true
+            "extendsClass": false
         }
     }
 
@@ -101,38 +100,17 @@ Exporter Options
 
 General options applied to all formatter.
 
-  * `indentation`
-
-    The indentation size for generated code.
-
-  * `useTabs`
-
-    Use tabs for indentation instead of spaces. Setting this option will ignore the `indentation`-option
-
-  * `filename`
-
-    The output filename format, use the following tag `%schema%`, `%table%`, `%entity%`, and `%extension%` to allow
-    the filename to be replaced with contextual data. Default is `%entity%.%extension%`.
-
-  * `skipPluralNameChecking`
-
-    Skip checking the plural name of model and leave as is, useful for non English table names. Default is `false`.
-
-  * `backupExistingFile`
-
-    If target already exists create a backup before replacing the content. Default is `true`.
-
-  * `enhanceManyToManyDetection`
-
-    If enabled, many to many relations between tables will be added to generated code. Default is `true`.
-
-  * `logToConsole`
-
-    If enabled, output the log to console. Default is `false`.
-
-  * `logFile`
-
-    If specified, output the log to a file. If this option presence, option `logToConsole` will be ignored instead. Default is empty.
+| Parameter `(Default)`               	| Description                                                                                                                                                       	|
+|-------------------------------------	|-------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| indentation                         	| The indentation size for generated code.                                                                                                                          	|
+| useTabs                             	| Use tabs for indentation instead of spaces. Setting this option will ignore the `indentation`-option                                                              	|
+| filename `(%entity%.%extension%)`   	| The output filename format, use the following tag `%schema%`, `%table%`, `%entity%`, and `%extension%` to allow the filename to be replaced with contextual data. 	|
+| skipPluralNameChecking `(false)`    	| Skip checking the plural name of model and leave as is, useful for non English table names.                                                                       	|
+| backupExistingFile `(true)`         	| If target already exists create a backup before replacing the content.                                                                                            	|
+| enhanceManyToManyDetection `(true)` 	| If enabled, many to many relations between tables will be added to generated code.                                                                                	|
+| logToConsole `(false)`              	| If enabled, output the log to console.                                                                                                                            	|
+| logFile `(null)`                    	| If specified, output the log to a file. If this option presence, option `logToConsole` will be ignored instead.                                                   	|
+|                                     	|                                                                                                                                                                   	|
 
 ### Comment behavior for All
 
@@ -177,10 +155,6 @@ General options applied to all formatter.
   * `extendsClass`
 
     Extend a base class, must be full namespace path to cache. Default is `false`.
-
-  * `useGedmo`
-
-    This is Doctrine specific, if we're using Gedmo Timestampable and Sluggable, then set this to `true`, this will automatically add the `use Gedmo\Mapping\Annotation as Gedmo;` statement to the top of all entity classes (to import the annotation)
 
 ### Comment behavior for Doctrine 2.0 Annotation
 
@@ -259,8 +233,12 @@ General options applied to all formatter.
   * `{d:sluggable}fields={"title"}{/d:sluggable}` (applied to Field)
     Add the `Gedmo` Sluggable annotation to field (e.g: varchar or text field), you can include other options here also.
 
-  * `{d:constants}{"CONSTANT1" : 1,"CONSTANT2" : 2,"CONSTANT3" : 3}{/d:constants}` (applied to Table)
-    This must be a json object (key, value) containing our constants (placed at the start of the class). Will add e.g `const CONSTANT1 = 1;..`
+  * `{d:tbbc}true,getPrice,setPrice,priceCurrency,priceAmount{/d:tbbc}` (applied to Field)
+    Make this a TBBC Money Bundle Field (view solution 1 here: https://github.com/TheBigBrainsCompany/TbbcMoneyBundle)
+    The values passed are 0-true, 1+2-getter and setter name, 3-currencyFieldName, 4-priceFieldName. You can omit these (except the `true` to use these defaults) 
+
+  * `{d:constants}{"CONSTANT1" : 1,"CONSTANT2" : 2,"":"","CONSTANT3" : 3}{/d:constants}` (applied to Table)
+    This must be a json object (key, value) containing our constants (placed at the start of the class). Will add e.g `const CONSTANT1 = 1;..`. Use a empty key value for a blank line (e.g: `"":"",`) to seperate constant types for readability.
 
 #### Additional option list for Doctrine 2.0 Annotation ZF2 Inputfilter
 
