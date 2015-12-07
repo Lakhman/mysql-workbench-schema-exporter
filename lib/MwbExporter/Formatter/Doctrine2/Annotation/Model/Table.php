@@ -778,6 +778,7 @@ class Table extends BaseTable
             if ($commentExists) {
                 $uses[] = 'Money\Currency';
                 $uses[] = 'Money\Money';
+                break;
             }
         }
 
