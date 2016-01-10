@@ -334,6 +334,12 @@ class Table extends BaseTable
             ->indent()
                 ->writeCallback(function (WriterInterface $writer, Table $_this = null) {
 
+                    // Call parent if fos user
+                    $isFosUserTable = $this->parseComment('fosuser');
+                    if (null !== $isFosUserTable) {
+                        $writer->write('parent::__construct();');
+                    }
+
                     $maxLen = 0;
 
                     $fields = [];
@@ -741,6 +747,12 @@ class Table extends BaseTable
     protected function getClassToExtend()
     {
         $class = $this->getDocument()->getConfig()->get(Formatter::CFG_EXTENDS_CLASS);
+        $isFosUserTable = $this->parseComment('fosuser');
+
+        if (null !== $isFosUserTable) {
+            return ' extends BaseUser';
+        }
+
         if(empty($class)) {
             return '';
         }
@@ -780,6 +792,12 @@ class Table extends BaseTable
                 $uses[] = 'Money\Money';
                 break;
             }
+        }
+
+        // FOS User Bundle {d:fosuser}{"table" : "SaverUser"}{/d:fosuser}
+        $isFosUserTable = $this->parseComment('fosuser');
+        if (null !== $isFosUserTable) {
+            $uses[] = 'FOS\UserBundle\Model\User as BaseUser';
         }
 
         if (count($this->getManyToManyRelations()) || $this->getColumns()->hasOneToManyRelation()) {
