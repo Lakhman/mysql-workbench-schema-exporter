@@ -291,7 +291,8 @@ class Table extends BaseTable
             $maxlen = max(array_map('strlen', array_keys($constants)));
 
             foreach ($constants as $key => $value) {
-                if ($key === '' || $value === '') { // strict comparison
+                // Could contain empty spaces for each additional space
+                if (empty(trim($key)) && $value === '') { // strict comparison
                     // If a k or v is empty, write a blank line
                     $writer->write('');
                 } else {
