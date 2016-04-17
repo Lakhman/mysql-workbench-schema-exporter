@@ -785,9 +785,9 @@ class Table extends BaseTable
             }
         }
 
-        // TBBC Money Bundle
+        // SebastianBergmann - Money
         foreach ($columns as $column) {
-            $commentExists = $column->parseComment('tbbc');
+            $commentExists = $column->parseComment('money');
             if ($commentExists) {
                 $uses[] = 'Money\Currency';
                 $uses[] = 'Money\Money';

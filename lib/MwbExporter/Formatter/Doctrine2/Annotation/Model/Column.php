@@ -570,7 +570,7 @@ class Column extends BaseColumn
             ->write('{')
             ->indent()
             ->write('$this->'.$priceAmount.' = $price->getAmount();')
-            ->write('$this->'.$priceCurrency.' = $price->getCurrency()->getName();')
+            ->write('$this->'.$priceCurrency.' = $price->getCurrency()->getCode();')
             ->write('')
             ->write('return $this;')
             ->outdent()
