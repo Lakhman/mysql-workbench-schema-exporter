@@ -479,7 +479,7 @@ class Column extends BaseColumn
 
         // If it's a price column (e.g: price_amount), before the getter/setter,
         // write our custom price g/s (to return our Money object)
-        if ($tbbcPriceColumn = $this->parseComment('tbbc')) {
+        if ($tbbcPriceColumn = $this->parseComment('money')) {
             if (empty(!$tbbcPriceColumn)) {
                 $this->writePriceMoneyGetterAndSetter($writer, $tbbcPriceColumn);
             }
